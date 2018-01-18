@@ -274,11 +274,11 @@ def main():
     # save a copy in img_cv for display, then convert to float32, normalize (divide by 255),
     # and finally convert to convert to float16 to pass to LoadTensor as input for an inference
     input_image = cv2.imread(input_image_file)
-    input_image = cv2.resize(input_image, (NETWORK_IMAGE_WIDTH, NETWORK_IMAGE_HEIGHT), cv2.INTER_LINEAR)
     display_image = input_image
+    input_image = cv2.resize(input_image, (NETWORK_IMAGE_WIDTH, NETWORK_IMAGE_HEIGHT), cv2.INTER_LINEAR)
     input_image = input_image.astype(np.float32)
     input_image = np.divide(input_image, 255.0)
-
+    input_image = input_image[:,:,::-1] #converting to RGB format
     # Load tensor and get result.  This executes the inference on the NCS
     graph.LoadTensor(input_image.astype(np.float16), 'user object')
     output, userobj = graph.GetResult()
